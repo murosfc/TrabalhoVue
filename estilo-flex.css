@@ -1,20 +1,26 @@
-.flex-container
-{
+.flex-container{
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
+    display: inline-block
+}
+.flex-item {
+    flex: 1 1 25%;
+    display: inline-block
+}
+.flex-container-carrinho
+{
+    flex-wrap: wrap;
     width: 15rem;
     padding: 10px;
-    flex-direction: column; 
-    /*margin-left: auto;
-    /margin-right: auto;*/    
+    flex-direction: row; 
+    display: flex;   
 }
-.flex-item
-{    
+.flex-item-carrinho
+{        
     padding: 10px;   
     min-width: 0; 
-    justify-content: center    
+    justify-content: center;      
 }
-
 .game-pic
 {
     top: 0px;
@@ -23,24 +29,7 @@
     height: auto;    
     object-position: center center;
     border-radius: 0.375em;
-    border: 1px solid rgb(218, 218, 218);
-    transition: filter 200ms ease-in-out 0s, transform 300ms cubic-bezier(0.095, 1.65, 0.775, 0.855) 0s, opacity 200ms linear 0s;
-    filter: var(--image-focus-filter, none);
-    aspect-ratio: auto 257 / 145;
-    box-sizing: border-box;        
-}
-
-.game-pic:after
-{
-    content: "";
-    display: block;
-    clear: both;
-}
-.price
-{
-    color: rgb(72, 72, 72);
-    font-size: larger;
-    font-weight: bold;    
+    border: 1px solid rgb(218, 218, 218);          
 }
 .game-pic-carrinho
 {
@@ -50,16 +39,59 @@
     height: auto;    
     object-position: center center;
     border-radius: 0.375em;
-    border: 1px solid rgb(218, 218, 218);
-    transition: filter 200ms ease-in-out 0s, transform 300ms cubic-bezier(0.095, 1.65, 0.775, 0.855) 0s, opacity 200ms linear 0s;
-    filter: var(--image-focus-filter, none);
-    aspect-ratio: auto 257 / 145;
-    box-sizing: border-box;        
+    border: 1px solid rgb(218, 218, 218);          
 }
 
-.game-pic-carrinho:after
+/*Formulário*/
+#area
 {
-    content: "";
-    display: block;
-    clear: both;
+  position:relative;
+  left:37%;
+  top:10em;
+  width:320px;
+  height:250px;
 }
+#area #formulario
+{
+  position:absolute;
+  display:flex;
+}
+
+
+fieldset
+{  
+  width:300px;
+  height:250px;
+}
+legend
+{
+  font-weight:bold;
+  font-family: "Segoe UI","Arial","Times New Roman";
+}
+#formulario label
+{
+  left:19px;
+  margin-right:5px;  
+}
+#campo-nome
+{   
+  left:95px;
+  top:23px;
+  width:225px;
+  margin: 10px;
+}
+#campo-valor, #campo-estoque
+{  
+    left:95px;
+    top:23px;
+    width:50px;
+    margin: 10px;
+}
+#campo-imagem
+{
+  left:95px;
+  margin-top:2px;
+  width:280px;
+  margin: 10px; 
+}
+
