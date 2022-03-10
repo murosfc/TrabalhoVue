@@ -1,0 +1,209 @@
+<!-- Faça um componente que tenha no mínimo 3 atributos, sendo um numérico. O componente deve ter um evento de escolha que submete-o a aplicação.
+Faça uma aplicação que tenha um array de componentes e os instancie.
+A aplicação deve, quando solicitada exibir o resumo dos componentes escolhidos. 
+Aluno: Felipe Celestino Muros -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Locadora de Jogos</title>
+
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#fff">
+    <link rel="stylesheet" href="estilo-flex.css">    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
+</head>
+
+<body>
+  <div id="app">
+    <header>        
+        <button id="btnAddJogo" v-on:click="menuAddJogo()">Adicionar jogo</button>
+        <div id="addJogo" style="visibility: hidden; display: none;">
+          <h3>Adicionar novo jogo</h3>
+          <p>Título do Jogo: <input type='text' v-model='jogo.nome' size="50"></p>
+          <p>Valor alugel: <input type='number' step="0.01" min="0" v-model='jogo.valor' size="10"></p>
+          <p>Quantidade disponível: <input type='number' min="1" v-model='jogo.estoque'></p>
+          <p>URL da imagem: <input type='text' v-model='jogo.imagem' size="100"></p>
+          <button v-on:click="adicionarJogo()">Inserir</button>
+        </div>
+        
+    </header> 
+    <br>
+    <div class="cart">
+      <button type="button" class="btn btn-primary" @click="verSairCarrinho()"><i class="fa fa-shopping-basket">{{carrinho.length}}</i></button>
+    </div>
+    <!-- Jogos disponíveis -->
+    <div class="flex-container" id = "jogosDisponiveis" style="visibility: visible; display: block;"> 
+      <h2>Jogos disponíveis:</h2>
+      <produto v-for="(produto,index) in produtos" :id=produto.id 
+        :nome=produto.nome
+        :imagem=produto.imagem 
+        :estoque=produto.estoque 
+        :valor=produto.valor			
+        @carrinho='adicionaCarrinho'></produto>
+    </div>
+
+     <!-- Carrinho -->
+     <div class="flex-container" id = "carrinho-cliente" style="visibility: hidden; display: none;"> 
+      <h2>Jogos no carrinho:</h2>
+      <h3 id="carrinhoVazio" style="visibility: hidden; display: none;">Seu carrinho está vazio!</h3>
+      <produto-carrinho v-for="(carrinho,index) in carrinho" :id=carrinho.id 
+        :nome=carrinho.nome
+        :imagem=carrinho.imagem          
+        :valor=carrinho.valor			
+        @carrinho='adicionaCarrinho'></produto-carrinho>
+        <br>
+        <h4>Total do carrinho: R$ {{ totalCarrinho() }}</h4>        
+        <button class="color-box" @click="verSairCarrinho()">Adicionar mais jogos</button>          
+    </div>
+
+  </div>      
+</body>
+
+<script>
+Vue.component('produto', {
+	template: 
+	'  <div class="flex-item">'+
+  '    <div >'+
+  '      <img :src="imagem" class="game-pic"/>'+
+  '    </div>'+
+  '    <div class="product-info">'+
+  '      <h3>{{ nome }}</h3>'+
+  '      <p>Valor do aluguel: R$ {{ valor }}</p>'+
+  '      <p v-if="estoque > 0"> Disponível</p>'+
+  '     <p v-else> Indisponível</p> '+
+  '      <button v-if="estoque > 0" @click="compra(id)" > '+
+  '        <div  class="color-box">Alugar</div>      '+
+  '      </button> '+
+  '    </div> '+
+  '  </div>  ', 
+  props: ['id','nome','imagem','estoque','valor'],
+  data: function () {
+    return {		
+	  }
+  },  
+   methods: {
+      compra(id) {
+          this.$emit('carrinho',id)
+      }
+  }
+})
+Vue.component('produto-carrinho', {
+	template: 
+  '  <div class="flex-item">'+
+  '    <div >'+
+  '      <img :src="imagem" class="game-pic-carrinho"/>'+
+  '    </div>'+
+  '    <div class="product-info">'+
+  '      <h4>{{ nome }}</h4>'+
+  '      <p>Valor do aluguel: R$ {{ valor }}</p>'+
+  '    </div> '+
+  '     <button @click="removerCarrinho(carrinho)" > '+
+  '        <div  class="color-box">Remover</div>      '+
+  '     </button> '+
+  '  </div>  ', 
+  props: ['id','nome','imagem','estoque','valor'],
+  data: function () {
+    return {		
+	  }
+  }, 
+})
+var app = new Vue({
+  el: '#app',
+  data() {
+    return {
+      produtos:[
+        {id: 0, nome: 'The Legends of Zelda', imagem: 'https://assets.nintendo.com/image/upload/c_pad,f_auto,h_613,q_auto,w_1089/ncom/pt_BR/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero?v=2022021721', valor: 15.50, estoque: 10},
+        {id: 1, nome: 'Mario Kart 8', imagem: 'https://assets.nintendo.com/image/upload/c_pad,f_auto,h_613,q_auto,w_1089/ncom/pt_BR/games/switch/m/mario-kart-8-deluxe-switch/hero?v=2022021722', valor: 15.50, estoque: 2},
+      ],
+      carrinho: [],
+      current: 0,
+      jogo: {
+        id: 0,
+        nome: "",
+        valor: 0.00,
+        estoque: 0,
+        imagem: ""
+        }, 
+    }
+  },
+  methods: {
+    adicionaCarrinho(id) {        
+        if (this.produtos[id].estoque > 0){         
+            this.carrinho.push(Object.assign({}, this.produtos[id]));
+            this.produtos[id].estoque = this.produtos[id].estoque -1;                  
+          }         
+        else {
+          alert("Jogo sem estoque para aluguel");
+        }      
+    },
+    adicionarJogo(){
+        if (this.jogo.titulo != "") {
+            var id = parseInt(this.produtos.length)
+            if (id != 0){
+              id = id+=1;
+            }            
+            this.produtos.id = id;
+            this.produtos.push(Object.assign({}, this.jogo));  
+            this.jogo.id = 0;                           
+            this.jogo.titulo ='';
+            this.jogo.valor = 0.00;
+            this.jogo.estoque = 0;
+            this.jogo.imagem ="";            
+        }else{
+            alert("Insira o título do jogo para adicionar");
+        }        
+    },
+    removerCarrinho(jogo){
+      let indice = this.carrinho.indexOf(jogo);
+      this.$delete(this.carrinho, indice);
+    },
+    menuAddJogo(){
+     if (document.getElementById("addJogo").style.visibility == "hidden"){
+      document.getElementById("addJogo").style.visibility = "visible";
+      document.getElementById("btnAddJogo").firstChild.data = "Ocultar Menu adicionar jogo"
+      document.getElementById("addJogo").style.display = "block";
+     }
+      else{
+        document.getElementById("addJogo").style.visibility = "hidden";
+        document.getElementById("btnAddJogo").firstChild.data = "Adicionar jogo"
+        document.getElementById("addJogo").style.display = "none";
+      }
+     },
+     verSairCarrinho() {
+      if (document.getElementById("jogosDisponiveis").style.visibility == "visible"){
+        document.getElementById("jogosDisponiveis").style.visibility = "hidden";
+        document.getElementById("jogosDisponiveis").style.display = "none";
+        document.getElementById("carrinho-cliente").style.visibility = "visible";
+        document.getElementById("carrinho-cliente").style.display = "block";
+        if (this.carrinho.length == 0)
+        {
+          document.getElementById("carrinhoVazio").style.visibility = "visible";
+          document.getElementById("carrinhoVazio").style.display = "block";
+        }
+        else{
+          document.getElementById("carrinhoVazio").style.visibility = "hidden";
+          document.getElementById("carrinhoVazio").style.display = "none";
+        }
+      }
+      else{
+        document.getElementById("jogosDisponiveis").style.visibility = "visible";
+        document.getElementById("jogosDisponiveis").style.display = "block";
+        document.getElementById("carrinho-cliente").style.visibility = "hidden";
+        document.getElementById("carrinho-cliente").style.display = "none";
+      }      
+     },
+     totalCarrinho() {
+        var total = 0;
+        for (var i=0; i < this.carrinho.length; i++) {
+          total = total + this.carrinho[i].valor;
+        }
+        console.log(total)
+        return total;
+      },  
+  }       
+})
+</script>
+</html>

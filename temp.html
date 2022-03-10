@@ -1,0 +1,23 @@
+<h2><jogos :titulo="j.titulo"></jogos></h2>
+                <img v-bind:src='j.imgUrl' class="game-pic">
+                <p><jogos :valor="j.valor"></jogos></p>
+                <p><jogos :estoque="j.estoque"></p>               
+                </jogos>@listener-carrinho="adicionarCarrinho"></jogos> 
+
+                    /*Título: {{titulo}}
+                    Valor Aluguel: {{valor}} 
+                    Quantidade em estoque: {{estoque}}                   
+                    <button @click="remove(a)">*/
+
+                        div v-for="j in jogos" class="flex-container"> 
+
+                        <button @click="remove(j)">
+                            Remover
+                        </button> 
+
+                        jogo: {
+                            titulo: "",
+                            valor: 0.00,
+                            estoque: 0,
+                            imgUrl: ""
+                        }

@@ -1,0 +1,101 @@
+<!-- Faça um componente que tenha no mínimo 3 atributos, sendo um numérico. O componente deve ter um evento de escolha que submete-o a aplicação.
+Faça uma aplicação que tenha um array de componentes e os instancie.
+A aplicação deve, quando solicitada exibir o resumo dos componentes escolhidos. 
+Aluno: Felipe Celestino Muros -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Locadora de Jogos</title>
+
+    <meta charset="utf-8">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#fff">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="estilo-flex.css">   
+</head>
+
+<body>
+    <div id="app">
+             
+        <br>
+        <br>
+        <div class="carrinho">            
+            <!--
+                Carrinho: [{{carrinho}}]
+                TODO (mostrar carrinho)
+            -->
+        </div>
+                    
+        <produtos v-for="j in jogos"
+        titulo: j.titulo
+        imgUrl: j.imgUrl
+        valor: j.valor
+        estoque: j.estoque
+        @listener-carrinho="adicionarCarrinho(j)"></produtos>                 
+        
+
+    </div>
+</body>
+<script>
+    Vue.component('produtos', {        
+        template:
+                '<div>'+ 
+                    '<h2> {{ titulo }} </h2>'+                    
+                    '<img :src="imgUrl" />'+                    
+                    '<p>Valor do aluguel: {{ valor }} </p>'+
+                    '<p>Quantidade em estoque: {{ estoque }} </p>'+                    
+                    '<button @click="compra(id)" > '+
+                        'Comprar'+
+                    '</button> '+
+                '</div>'       
+            ,
+        props: ['titulo', 'imgUrl', 'valor', 'estoque'],    
+        data: function () {
+            return {		
+	        }
+        },              
+        methods: {
+            comprar(i) {
+                this.$emit('listener-carrinho', i)
+                console.log(i);
+            }
+        }        
+    })
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {            
+                jogos: [
+                    {titulo: "The Legends of Zelda", valor: 15, estoque: 2, imgUrl: "https://assets.nintendo.com/image/upload/c_pad,f_auto,h_613,q_auto,w_1089/ncom/pt_BR/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero?v=2022021721"},
+                    {titulo: "Mario Kart 8: Deluxe", valor: 15, estoque: 8, imgUrl: "https://assets.nintendo.com/image/upload/c_pad,f_auto,h_613,q_auto,w_1089/ncom/pt_BR/games/switch/m/mario-kart-8-deluxe-switch/hero?v=2022021722"}
+                ],
+                jogo: {
+                    titulo: "Teste",
+                    valor: 0.00,
+                    estoque: 0,
+                    imgUrl: ""
+                }            
+            }       
+        },
+        methods: {
+            adicionarCarrinho(id) {
+                this.carrinho.push(id)
+            },
+            adicionarJogo(){
+                if (this.jogo.titulo != "") {
+                    this.jogos.push(Object.assign({}, this.jogo));                             
+                    this.jogo.titulo ='';
+                    this.jogo.valor = 0.00;
+                    this.jogo.estoque = 0;
+                    this.jogo.imgUrl ="";
+                }else{
+                    alert("Insira o título do jogo para adicionar");
+                }
+            }
+        }
+    })
+</script>
+
+</html>
